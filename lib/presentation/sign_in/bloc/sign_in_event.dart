@@ -6,3 +6,7 @@ class SignInEvent {
 
   SignInEvent(this.email, this.passWord);
 }
+
+// class SignOutEvent extends SignInEvent {
+//   SignOutEvent() : super("", ""); // Không cần email và password cho logout
+// }

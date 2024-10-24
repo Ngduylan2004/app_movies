@@ -23,5 +23,9 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
         emit(SignInFailure(error.toString()));
       }
     });
+    // on<SignOutEvent>((event, emit) async {
+    //   await _auth.signOut();
+    //   emit(SignOutSuccess());
+    // });
   }
 }

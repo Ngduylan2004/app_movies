@@ -22,9 +22,10 @@ abstract class SignInState {
   const SignInState();
 }
 
-// Trạng thái khi đăng nhập thành công
 class SignInSuccess extends SignInState {
   final String userId;
 
   const SignInSuccess(this.userId);
 }
+
+// class SignOutSuccess extends SignInState {}

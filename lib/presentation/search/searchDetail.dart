@@ -1,3 +1,4 @@
+import 'package:app_movies/presentation/detail/detail_screen.dart';
 import 'package:app_movies/presentation/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -126,76 +127,87 @@ class SearchDetailScreen extends StatelessWidget {
                       itemBuilder: (context, index) {
                         final movie = state.movies[index];
 
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 10),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(20),
-                                  child: Image.network(
-                                    movie.posterPath != null
-                                        ? 'https://image.tmdb.org/t/p/w500${movie.posterPath}'
-                                        : 'https://via.placeholder.com/150',
-                                    width: (MediaQuery.of(context).size.width -
-                                            210) /
-                                        2,
-                                    height: 120,
-                                    fit: BoxFit.cover,
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        DetailPage(movie: movie)));
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(20),
+                                    child: Image.network(
+                                      movie.posterPath != null
+                                          ? 'https://image.tmdb.org/t/p/w500${movie.posterPath}'
+                                          : 'https://via.placeholder.com/150',
+                                      width:
+                                          (MediaQuery.of(context).size.width -
+                                                  210) /
+                                              2,
+                                      height: 120,
+                                      fit: BoxFit.cover,
+                                    ),
                                   ),
                                 ),
-                              ),
-                              const SizedBox(width: 16),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      movie.title!,
-                                      style: const TextStyle(
-                                          color: Colors.white, fontSize: 16),
-                                    ),
-                                    const SizedBox(height: 8),
-                                    Row(
-                                      children: [
-                                        const Icon(Icons.star,
-                                            color: Colors.amber, size: 18),
-                                        const SizedBox(width: 4),
-                                        Text(
-                                          '${movie.voteAverage}',
-                                          style: const TextStyle(
-                                              color: Colors.amber),
-                                        ),
-                                      ],
-                                    ),
-                                    Row(
-                                      children: [
-                                        const Icon(Icons.thumb_up,
-                                            color: Colors.white, size: 18),
-                                        const SizedBox(width: 4),
-                                        Text(
-                                          '${movie.voteCount}',
-                                          style: const TextStyle(
-                                              color: Colors.white),
-                                        ),
-                                      ],
-                                    ),
-                                    Row(
-                                      children: [
-                                        const Icon(Icons.calendar_today,
-                                            color: Colors.white, size: 18),
-                                        const SizedBox(width: 4),
-                                        Text(
-                                          '${movie.releaseDate}',
-                                          style: const TextStyle(
-                                              color: Colors.white),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
+                                const SizedBox(width: 16),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        movie.title!,
+                                        style: const TextStyle(
+                                            color: Colors.white, fontSize: 16),
+                                      ),
+                                      const SizedBox(height: 8),
+                                      Row(
+                                        children: [
+                                          const Icon(Icons.star,
+                                              color: Colors.amber, size: 18),
+                                          const SizedBox(width: 4),
+                                          Text(
+                                            '${movie.voteAverage}',
+                                            style: const TextStyle(
+                                                color: Colors.amber),
+                                          ),
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          const Icon(Icons.thumb_up,
+                                              color: Colors.white, size: 18),
+                                          const SizedBox(width: 4),
+                                          Text(
+                                            '${movie.voteCount}',
+                                            style: const TextStyle(
+                                                color: Colors.white),
+                                          ),
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          const Icon(Icons.calendar_today,
+                                              color: Colors.white, size: 18),
+                                          const SizedBox(width: 4),
+                                          Text(
+                                            '${movie.releaseDate}',
+                                            style: const TextStyle(
+                                                color: Colors.white),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         );
                       },

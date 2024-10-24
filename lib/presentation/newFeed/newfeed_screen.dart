@@ -2,6 +2,7 @@ import 'package:app_movies/data/repostory/movies_repostory_impl.dart';
 import 'package:app_movies/presentation/newFeed/bloc/new_feed_bloc.dart';
 import 'package:app_movies/presentation/newFeed/widget/newfeed_banner_widget.dart';
 import 'package:app_movies/presentation/newFeed/widget/newfeed_widget.dart';
+import 'package:app_movies/presentation/sign_in/login_screen.dart';
 import 'package:app_movies/presentation/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,9 +20,9 @@ class NewfeedScreen extends StatelessWidget {
         appBar: AppBar(
           titleSpacing: 28,
           backgroundColor: Colors.transparent,
-          toolbarHeight: 80,
+          toolbarHeight: 100,
           title: const Padding(
-            padding: EdgeInsets.only(top: 53.0),
+            padding: EdgeInsets.only(top: 40.0),
             child: Row(
               children: [
                 Text(
@@ -43,6 +44,29 @@ class NewfeedScreen extends StatelessWidget {
               ],
             ),
           ),
+          actions: [
+            Padding(
+              padding: const EdgeInsets.only(top: 40.0, right: 20),
+              child: IconButton(
+                icon: const Icon(
+                  Icons.logout,
+                  color: Colors.white,
+                  size: 30,
+                ),
+                onPressed: () {
+                  // Thực hiện hành động khi nhấn vào biểu tượng logout
+                  // Ví dụ: Điều hướng về trang đăng nhập hoặc thực hiện logout
+                  print('Đăng xuất');
+                  // Thêm logic đăng xuất tại đây, ví dụ gọi API đăng xuất hoặc điều hướng
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const LoginScreen()),
+                  );
+                },
+              ),
+            ),
+          ],
         ),
         body: const SingleChildScrollView(
           child: Padding(
