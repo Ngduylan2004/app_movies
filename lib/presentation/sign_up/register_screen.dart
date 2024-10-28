@@ -1,5 +1,5 @@
 import 'package:app_movies/presentation/home/home_screen.dart';
-import 'package:app_movies/presentation/sign_in/login_screen.dart'; // Đảm bảo import LoginScreen
+import 'package:app_movies/presentation/sign_in/login.dart';
 import 'package:app_movies/presentation/sign_up/bloc/signup_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -176,7 +176,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => const LoginScreen(),
+                                builder: (context) => const Login(),
                               ),
                             );
                           },
