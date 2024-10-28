@@ -1,9 +1,9 @@
 part of 'signup_bloc.dart';
 
 class SignupFailure extends SignupState {
-  final String message;
+  final String error;
 
-  SignupFailure({required this.message});
+  SignupFailure(this.error);
 }
 
 class SignupInitial extends SignupState {}

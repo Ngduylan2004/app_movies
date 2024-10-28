@@ -5,6 +5,8 @@ class SignInFailure extends SignInState {
   final String error;
 
   const SignInFailure(this.error);
+  @override
+  List<Object?> get props => [error];
 }
 
 // Trạng thái khởi tạo
@@ -18,14 +20,18 @@ class SignInLoading extends SignInState {
 }
 
 // Trạng thái cơ bản cho đăng nhập
-abstract class SignInState {
+abstract class SignInState extends Equatable {
   const SignInState();
+  @override
+  List<Object?> get props => [];
 }
 
 class SignInSuccess extends SignInState {
   final String userId;
 
   const SignInSuccess(this.userId);
+  @override
+  List<Object?> get props => [userId];
 }
 
 // class SignOutSuccess extends SignInState {}

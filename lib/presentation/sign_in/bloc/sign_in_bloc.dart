@@ -1,3 +1,4 @@
+import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -18,14 +19,16 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
         );
 
         emit(SignInSuccess(userCredential.user!.uid));
-      } catch (error) {
-        // Đăng nhập thất bại, phát trạng thái lỗi
-        emit(SignInFailure(error.toString()));
+      } on FirebaseAuthException catch (error) {
+        // Print specific error code and message
+
+        print('[SignInBloc] - [SignInEvent] err message: ${error.message}');
+
+        emit(
+            SignInFailure(error.message ?? 'An error occurred during sign-in'));
+      } catch (e) {
+        emit(SignInFailure('An unexpected error occurred: $e'));
       }
     });
-    // on<SignOutEvent>((event, emit) async {
-    //   await _auth.signOut();
-    //   emit(SignOutSuccess());
-    // });
   }
 }

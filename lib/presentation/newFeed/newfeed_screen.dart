@@ -2,7 +2,7 @@ import 'package:app_movies/data/repostory/movies_repostory_impl.dart';
 import 'package:app_movies/presentation/newFeed/bloc/new_feed_bloc.dart';
 import 'package:app_movies/presentation/newFeed/widget/newfeed_banner_widget.dart';
 import 'package:app_movies/presentation/newFeed/widget/newfeed_widget.dart';
-import 'package:app_movies/presentation/sign_in/login_screen.dart';
+import 'package:app_movies/presentation/sign_up/register_screen.dart';
 import 'package:app_movies/presentation/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -56,12 +56,12 @@ class NewfeedScreen extends StatelessWidget {
                 onPressed: () {
                   // Thực hiện hành động khi nhấn vào biểu tượng logout
                   // Ví dụ: Điều hướng về trang đăng nhập hoặc thực hiện logout
-                  print('Đăng xuất');
+
                   // Thêm logic đăng xuất tại đây, ví dụ gọi API đăng xuất hoặc điều hướng
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const LoginScreen()),
+                        builder: (context) => const RegisterScreen()),
                   );
                 },
               ),
