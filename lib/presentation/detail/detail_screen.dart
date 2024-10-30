@@ -6,6 +6,7 @@ import 'package:app_movies/presentation/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class DetailPage extends StatelessWidget {
   final MoviesEntities movie;
@@ -16,29 +17,58 @@ class DetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => DetailBloc(MoviesRepositoryImpl.instance)
-        ..add(DetailEventRelateMovies(movie.genreIds ?? [])),
+        ..add(DetailEventRelateMovies(movie.genreIds ?? []))
+        ..add(DetailEventGetVideo(movie.id ?? 0)),
       child: Scaffold(
         extendBodyBehindAppBar: true,
         backgroundColor: const Color(0xff15141F),
         appBar: AppBar(
           backgroundColor: Colors.transparent,
+          iconTheme: const IconThemeData(color: Colors.amber),
         ),
         body: SingleChildScrollView(
           child: Column(
             children: [
-              Stack(
-                alignment: Alignment.center,
-                children: [
-                  Image.network(
-                    'https://image.tmdb.org/t/p/w500${movie.backdropPath}',
-                    width: MediaQuery.of(context).size.width,
-                    height: 345,
-                    fit: BoxFit.cover,
-                  ),
-                  Image.asset(
-                    'assets/images/home/icon/Icon.png',
-                  ),
-                ],
+              BlocBuilder<DetailBloc, DetailState>(
+                builder: (context, state) {
+                  if (state.videoDetail.isEmpty) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  YoutubePlayerController controller = YoutubePlayerController(
+                      initialVideoId: state.videoDetail.first.key ?? '',
+                      flags: const YoutubePlayerFlags(
+                          mute: false,
+                          autoPlay: false,
+                          controlsVisibleAtStart: true));
+                  return Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      YoutubePlayer(
+                        controller: controller,
+                        showVideoProgressIndicator: true,
+                        progressIndicatorColor: Colors.red,
+                        progressColors: const ProgressBarColors(
+                          playedColor: Colors.amber,
+                          handleColor: Colors.amberAccent,
+                        ),
+                        onReady: () {
+                          controller.addListener(() {});
+                        },
+                      ),
+                      // Image.network(
+                      //   'https://image.tmdb.org/t/p/w500${movie.backdropPath}',
+                      //   width: MediaQuery.of(context).size.width,
+                      //   height: 345,
+                      //   fit: BoxFit.cover,
+                      // ),
+                      // Image.asset(
+                      //   'assets/images/home/icon/Icon.png',
+                      // ),
+                    ],
+                  );
+                },
               ),
               Padding(
                 padding: const EdgeInsets.all(12),

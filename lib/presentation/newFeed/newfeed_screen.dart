@@ -1,8 +1,9 @@
 import 'package:app_movies/data/repostory/movies_repostory_impl.dart';
+import 'package:app_movies/presentation/authen/sign_in/bloc/sign_in_bloc.dart';
+import 'package:app_movies/presentation/authen/sign_in/login_screen.dart';
 import 'package:app_movies/presentation/newFeed/bloc/new_feed_bloc.dart';
 import 'package:app_movies/presentation/newFeed/widget/newfeed_banner_widget.dart';
 import 'package:app_movies/presentation/newFeed/widget/newfeed_widget.dart';
-import 'package:app_movies/presentation/sign_up/register_screen.dart';
 import 'package:app_movies/presentation/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,59 +15,80 @@ class NewfeedScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => NewFeedBloc(MoviesRepositoryImpl.instance)
+        ..add(NewFeedEventVideo())
         ..add(NewFeedEventTreding()),
       child: Scaffold(
         backgroundColor: AppTheme.primaryColor,
         appBar: AppBar(
+          scrolledUnderElevation: 0,
           titleSpacing: 28,
           backgroundColor: Colors.transparent,
           toolbarHeight: 100,
-          title: const Padding(
-            padding: EdgeInsets.only(top: 40.0),
-            child: Row(
-              children: [
-                Text(
-                  'Stream ',
-                  style: TextStyle(
-                    fontSize: 29,
-                    fontWeight: FontWeight.w400,
-                    color: AppTheme.accentColor,
-                  ),
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Padding(
+                padding: EdgeInsets.only(top: 40.0),
+                child: Row(
+                  children: [
+                    Text(
+                      'Stream ',
+                      style: TextStyle(
+                        fontSize: 29,
+                        fontWeight: FontWeight.w400,
+                        color: AppTheme.accentColor,
+                      ),
+                    ),
+                    Text(
+                      'Everywhere',
+                      style: TextStyle(
+                        fontSize: 29,
+                        fontWeight: FontWeight.w400,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
                 ),
-                Text(
-                  'Everywhere',
-                  style: TextStyle(
-                    fontSize: 29,
-                    fontWeight: FontWeight.w400,
-                    color: Colors.white,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          actions: [
-            Padding(
-              padding: const EdgeInsets.only(top: 40.0, right: 20),
-              child: IconButton(
-                icon: const Icon(
-                  Icons.logout,
-                  color: Colors.white,
-                  size: 30,
-                ),
-                onPressed: () {
-                  // Thực hiện hành động khi nhấn vào biểu tượng logout
-                  // Ví dụ: Điều hướng về trang đăng nhập hoặc thực hiện logout
-
-                  // Thêm logic đăng xuất tại đây, ví dụ gọi API đăng xuất hoặc điều hướng
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const RegisterScreen()),
-                  );
-                },
               ),
-            ),
-          ],
+              // Thêm IconButton vào AppBar
+              BlocProvider(
+                create: (context) => SignInBloc(),
+                child: BlocConsumer<SignInBloc, SignInState>(
+                  listener: (context, state) {
+                    if (state is SignoutSuccess) {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const LoginScreen()),
+                      );
+                    } else if (state is SignInFailure) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(state.error),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                    }
+                  },
+                  builder: (context, state) {
+                    return Padding(
+                      padding: const EdgeInsets.only(top: 40.0, right: 10),
+                      child: IconButton(
+                        icon: const Icon(
+                          Icons.logout,
+                          color: Colors.white,
+                          size: 30,
+                        ),
+                        onPressed: () {
+                          context.read<SignInBloc>().add(SignOutEvent());
+                        },
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
         ),
         body: const SingleChildScrollView(
           child: Padding(
@@ -75,6 +97,7 @@ class NewfeedScreen extends StatelessWidget {
               children: [
                 NewfeedBannerWidget(),
                 SizedBox(height: 30),
+
                 Row(
                   children: [
                     Text(
@@ -88,7 +111,7 @@ class NewfeedScreen extends StatelessWidget {
                   ],
                 ),
                 SizedBox(height: 20),
-                NewfeedWidget(), // Thay đổi đây
+                NewfeedWidget(), // Hiển thị danh sách nội dung
               ],
             ),
           ),

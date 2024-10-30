@@ -1,8 +1,10 @@
 import 'package:app_movies/data/data_source/remote/api_movies_service.dart';
 import 'package:app_movies/data/model/genre_movies.dart';
 import 'package:app_movies/data/model/movies_model.dart';
+import 'package:app_movies/data/model/video_movies.dart';
 import 'package:app_movies/domain/entities/genre_movies_entities.dart';
 import 'package:app_movies/domain/entities/movies_entities.dart';
+import 'package:app_movies/domain/entities/video_moviesw_entities.dart';
 import 'package:app_movies/domain/repostory/movies_repostory.dart';
 
 class MoviesRepositoryImpl implements MoviesRepository {
@@ -47,6 +49,15 @@ class MoviesRepositoryImpl implements MoviesRepository {
     final trendingData = await _movieService.fetchTrendingMovies();
     return trendingData
         .map<MoviesModel>((movie) => MoviesModel.fromJson(movie))
+        .toList();
+  }
+
+  // lấy video youtube
+  @override
+  Future<List<VideoMovieswEntities>> getVideoMovies(int movieId) async {
+    final videos = await _movieService.fetchVideoMovies(movieId);
+    return videos
+        .map<VideoMovies>((video) => VideoMovies.fromJson(video))
         .toList();
   }
 }

@@ -29,4 +29,9 @@ class MoviesEntities {
     this.voteAverage,
     this.voteCount,
   });
+
+  @override
+  String toString() {
+    return 'movie id: $id';
+  }
 }

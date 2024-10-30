@@ -1,12 +1,12 @@
-part of 'auth_bloc.dart';
+// part of 'auth_bloc.dart';
 
-class AuthCheckRequested extends AuthEvent {}
+// class AuthCheckRequested extends AuthEvent {}
 
-sealed class AuthEvent extends Equatable {
-  const AuthEvent();
+// sealed class AuthEvent extends Equatable {
+//   const AuthEvent();
 
-  @override
-  List<Object> get props => [];
-}
+//   @override
+//   List<Object> get props => [];
+// }
 
-class AuthToken extends AuthEvent {}
+// class AuthToken extends AuthEvent {}

@@ -64,6 +64,7 @@ class SearchDetailScreen extends StatelessWidget {
                         prefixIcon: IconButton(
                           icon: const Icon(Icons.search, color: Colors.white),
                           onPressed: () {
+                            FocusScope.of(context).unfocus();
                             final keyWord = _searchControllers.text.trim();
                             if (keyWord.isNotEmpty) {
                               context

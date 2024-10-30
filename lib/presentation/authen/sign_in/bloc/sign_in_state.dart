@@ -34,4 +34,5 @@ class SignInSuccess extends SignInState {
   List<Object?> get props => [userId];
 }
 
+class SignoutSuccess extends SignInState {}
 // class SignOutSuccess extends SignInState {}

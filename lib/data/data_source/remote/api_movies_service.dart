@@ -10,8 +10,7 @@ class ApiMoviesService {
   final ApiService _apiService;
 
   ApiMoviesService(this._apiService);
-
-  // Lấy danh sách thể loại phim
+// Lấy danh sách thể loại phim
   Future<List<dynamic>> fetchGenreMovies() async {
     const String baseUrlGenre = '/genre/movie/list';
 
@@ -77,5 +76,13 @@ class ApiMoviesService {
       print('Lỗi khi lấy danh sách phim xu hướng: $e');
       return []; // Return an empty list if there's an error
     }
+  }
+
+  // lấy video movie
+  Future<List<dynamic>> fetchVideoMovies(int movieId) async {
+    String baseUrlVideo = '/movie/$movieId/videos';
+    final response = await _apiService.dio.get(baseUrlVideo,
+        queryParameters: {'movie_id': movieId, 'language': 'en-US'});
+    return response.data['results'];
   }
 }

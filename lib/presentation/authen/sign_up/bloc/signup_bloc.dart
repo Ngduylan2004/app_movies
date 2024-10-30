@@ -21,9 +21,10 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
         );
 
         // Lưu thông tin người dùng vào Firestore
-        await _firestore.collection('user').doc(userCredential.user!.uid).set({
-          'email': event.email,
-        });
+        await _firestore
+            .collection('user')
+            .doc(userCredential.user!.uid)
+            .set({'email': event.email, 'username': event.username});
 
         // Phát ra trạng thái thành công
         emit(SignupSuccess());
