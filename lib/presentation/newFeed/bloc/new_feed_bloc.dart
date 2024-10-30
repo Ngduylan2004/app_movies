@@ -20,7 +20,7 @@ class NewFeedBloc extends Bloc<NewFeedEvent, NewFeedState> {
     );
     on<NewFeedEventVideo>(
       (event, emit) async {
-        final videoList = await movieRepository.getVideoMovies(889737);
+        final videoList = await movieRepository.getVideoMovies(event.movieId);
         // print('ds video:$videoList');
         emit(NewFeedState(state.trendingMovies, videoList));
       },

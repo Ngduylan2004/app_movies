@@ -19,12 +19,12 @@ class DetailBloc extends Bloc<DetailEvent, DetailState> {
         emit(DetailState(relateMovies, relateGenre, state.videoDetail));
       },
     );
-    on<DetailEventGetVideo>(
-      (event, emit) async {
-        final videoList = await moviesRepository.getVideoMovies(event.movieId);
-        // print('ds video:$videoList');
-        emit(DetailState(state.relatedMovies, state.relatedGenre, videoList));
-      },
-    );
+    // on<DetailEventGetVideo>(
+    //   (event, emit) async {
+    //     final videoList = await moviesRepository.getVideoMovies(event.movieId);
+    //     // print('ds video:$videoList');
+    //     emit(DetailState(state.relatedMovies, state.relatedGenre, videoList));
+    //   },
+    // );
   }
 }

@@ -65,7 +65,7 @@ class DetailWidget extends StatelessWidget {
               fontWeight: FontWeight.bold,
             ),
             textAlign: TextAlign.start,
-            maxLines: 2,
+            maxLines: 1,
             overflow: TextOverflow.visible,
           ),
         ],

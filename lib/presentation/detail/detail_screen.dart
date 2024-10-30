@@ -2,23 +2,30 @@ import 'package:app_movies/data/repostory/movies_repostory_impl.dart';
 import 'package:app_movies/domain/entities/movies_entities.dart';
 import 'package:app_movies/presentation/detail/bloc/detail_bloc.dart';
 import 'package:app_movies/presentation/detail/widget/detail_widget.dart';
+import 'package:app_movies/presentation/newFeed/bloc/new_feed_bloc.dart'; // Import NewFeedBloc
 import 'package:app_movies/presentation/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
-class DetailPage extends StatelessWidget {
+class DetailPage extends StatefulWidget {
   final MoviesEntities movie;
 
   const DetailPage({super.key, required this.movie});
 
   @override
+  State<DetailPage> createState() => _DetailPageState();
+}
+
+class _DetailPageState extends State<DetailPage> {
+  late final NewFeedBloc _newFeedBloc; // Declare NewFeedBloc
+
+  @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => DetailBloc(MoviesRepositoryImpl.instance)
-        ..add(DetailEventRelateMovies(movie.genreIds ?? []))
-        ..add(DetailEventGetVideo(movie.id ?? 0)),
+        ..add(DetailEventRelateMovies(widget.movie.genreIds ?? [])),
       child: Scaffold(
         extendBodyBehindAppBar: true,
         backgroundColor: const Color(0xff15141F),
@@ -29,44 +36,32 @@ class DetailPage extends StatelessWidget {
         body: SingleChildScrollView(
           child: Column(
             children: [
-              BlocBuilder<DetailBloc, DetailState>(
+              BlocBuilder<NewFeedBloc, NewFeedState>(
                 builder: (context, state) {
-                  if (state.videoDetail.isEmpty) {
+                  if (state.videoTrending.isEmpty) {
                     return const Center(
                       child: CircularProgressIndicator(),
                     );
                   }
-                  YoutubePlayerController controller = YoutubePlayerController(
-                      initialVideoId: state.videoDetail.first.key ?? '',
-                      flags: const YoutubePlayerFlags(
-                          mute: false,
-                          autoPlay: false,
-                          controlsVisibleAtStart: true));
-                  return Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      YoutubePlayer(
-                        controller: controller,
-                        showVideoProgressIndicator: true,
-                        progressIndicatorColor: Colors.red,
-                        progressColors: const ProgressBarColors(
-                          playedColor: Colors.amber,
-                          handleColor: Colors.amberAccent,
+                  final videoKey = state.videoTrending.first.key ?? '';
+                  return GestureDetector(
+                    onTap: () => _showDialog(videoKey), // Show dialog on tap
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        Image.network(
+                          'https://image.tmdb.org/t/p/w500${widget.movie.backdropPath}',
+                          width: MediaQuery.of(context).size.width,
+                          height: 345,
+                          fit: BoxFit.cover,
                         ),
-                        onReady: () {
-                          controller.addListener(() {});
-                        },
-                      ),
-                      // Image.network(
-                      //   'https://image.tmdb.org/t/p/w500${movie.backdropPath}',
-                      //   width: MediaQuery.of(context).size.width,
-                      //   height: 345,
-                      //   fit: BoxFit.cover,
-                      // ),
-                      // Image.asset(
-                      //   'assets/images/home/icon/Icon.png',
-                      // ),
-                    ],
+                        const Icon(
+                          Icons.play_circle_fill,
+                          size: 50,
+                          color: Colors.amber,
+                        ),
+                      ],
+                    ),
                   );
                 },
               ),
@@ -80,7 +75,7 @@ class DetailPage extends StatelessWidget {
                       children: [
                         Expanded(
                           child: Text(
-                            movie.title ?? 'Untitled',
+                            widget.movie.title ?? 'Untitled',
                             style: const TextStyle(
                                 color: AppTheme.textColor, fontSize: 24),
                           ),
@@ -107,7 +102,7 @@ class DetailPage extends StatelessWidget {
                             ),
                             const SizedBox(width: 5),
                             Text(
-                              '${movie.voteCount ?? 0}',
+                              '${widget.movie.voteCount ?? 0}',
                               style: const TextStyle(
                                   color: AppTheme.textColor, fontSize: 15),
                             )
@@ -123,7 +118,7 @@ class DetailPage extends StatelessWidget {
                             ),
                             const SizedBox(width: 5),
                             Text(
-                              '${movie.voteAverage ?? 0} (IMDb)',
+                              '${widget.movie.voteAverage ?? 0} (IMDb)',
                               style: const TextStyle(
                                   color: AppTheme.textColor, fontSize: 15),
                             )
@@ -155,9 +150,10 @@ class DetailPage extends StatelessWidget {
                                 ),
                                 const SizedBox(height: 6),
                                 Text(
-                                  movie.releaseDate != null
+                                  widget.movie.releaseDate != null
                                       ? DateFormat('dd MMMM yyyy').format(
-                                          DateTime.parse(movie.releaseDate!))
+                                          DateTime.parse(
+                                              widget.movie.releaseDate!))
                                       : 'No release date available',
                                   style: const TextStyle(
                                     color: AppTheme.textColor,
@@ -184,7 +180,8 @@ class DetailPage extends StatelessWidget {
                                     builder: (context, state) {
                                       // Lọc các thể loại theo ID từ movie.genreIds
                                       final filteredGenres = state.relatedGenre
-                                          .where((genre) => movie.genreIds!
+                                          .where((genre) => widget
+                                              .movie.genreIds!
                                               .contains(genre.id))
                                           .toList();
 
@@ -230,7 +227,7 @@ class DetailPage extends StatelessWidget {
                       style: TextStyle(color: Colors.white, fontSize: 19),
                     ),
                     Text(
-                      movie.overview ?? 'No synopsis available.',
+                      widget.movie.overview ?? 'No synopsis available.',
                       style: const TextStyle(color: AppTheme.hintColor),
                     ),
                     const SizedBox(height: 16),
@@ -248,5 +245,38 @@ class DetailPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _newFeedBloc = BlocProvider.of<NewFeedBloc>(context);
+    _newFeedBloc.add(NewFeedEventVideo(movieId: widget.movie.id ?? 0));
+  }
+
+  void _showDialog(String keyMovie) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Dialog(
+            backgroundColor: Colors.black,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child: SizedBox(
+                child: YoutubePlayer(
+                  aspectRatio: 16 / 20,
+                  showVideoProgressIndicator: true,
+                  controller: YoutubePlayerController(
+                      initialVideoId: keyMovie,
+                      flags: const YoutubePlayerFlags(
+                        mute: true,
+                        autoPlay: false,
+                        controlsVisibleAtStart: true,
+                      )),
+                ),
+              ),
+            ),
+          );
+        });
   }
 }

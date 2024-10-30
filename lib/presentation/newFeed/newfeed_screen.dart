@@ -15,7 +15,7 @@ class NewfeedScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => NewFeedBloc(MoviesRepositoryImpl.instance)
-        ..add(NewFeedEventVideo())
+        ..add(NewFeedEventVideo(movieId: 889737))
         ..add(NewFeedEventTreding()),
       child: Scaffold(
         backgroundColor: AppTheme.primaryColor,
@@ -72,7 +72,7 @@ class NewfeedScreen extends StatelessWidget {
                   },
                   builder: (context, state) {
                     return Padding(
-                      padding: const EdgeInsets.only(top: 40.0, right: 10),
+                      padding: const EdgeInsets.only(top: 40.0, right: 5),
                       child: IconButton(
                         icon: const Icon(
                           Icons.logout,
