@@ -16,8 +16,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passController = TextEditingController();
   bool _isPasswordVisible = false;
-  bool _isLoading =
-      false; // Thay đổi thành không final để có thể thay đổi trạng thái
+  bool _isLoading = false;
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -43,7 +42,7 @@ class _LoginScreenState extends State<LoginScreen> {
               padding: const EdgeInsets.all(16.0),
               child: SingleChildScrollView(
                 child: Form(
-                  key: _formKey, // Gán key cho Form
+                  key: _formKey,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -57,7 +56,6 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                       const SizedBox(height: 20),
-                      // Trường nhập email
                       TextFormField(
                         controller: _emailController,
                         decoration: const InputDecoration(
@@ -77,7 +75,6 @@ class _LoginScreenState extends State<LoginScreen> {
                         keyboardType: TextInputType.emailAddress,
                       ),
                       const SizedBox(height: 16.0),
-                      // Trường nhập mật khẩu
                       TextFormField(
                         controller: _passController,
                         decoration: InputDecoration(
@@ -109,7 +106,6 @@ class _LoginScreenState extends State<LoginScreen> {
                         obscureText: !_isPasswordVisible,
                       ),
                       const SizedBox(height: 20),
-                      // Nút đăng nhập
                       BlocConsumer<SignInBloc, SignInState>(
                         listener: (context, state) {
                           if (state is SignInLoading) {
@@ -141,32 +137,59 @@ class _LoginScreenState extends State<LoginScreen> {
                           }
                         },
                         builder: (context, state) {
-                          return ElevatedButton(
-                            onPressed: () async {
-                              FocusScope.of(context).unfocus();
-                              // Kiểm tra xem form có hợp lệ không
-                              if (_formKey.currentState!.validate()) {
-                                context.read<SignInBloc>().add(SignCheckEvent(
-                                    _emailController.text,
-                                    _passController.text));
-                              }
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xffFFC107),
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 15, horizontal: 30),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
+                          return Column(
+                            children: [
+                              ElevatedButton(
+                                onPressed: () async {
+                                  FocusScope.of(context).unfocus();
+                                  if (_formKey.currentState!.validate()) {
+                                    context.read<SignInBloc>().add(
+                                        SignCheckEvent(_emailController.text,
+                                            _passController.text));
+                                  }
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: const Color(0xffFFC107),
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 15, horizontal: 30),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                ),
+                                child: const Text(
+                                  'Login',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                  ),
+                                ),
                               ),
-                            ),
-                            child: const Text(
-                              'Login',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
+                              const SizedBox(height: 20),
+                              ElevatedButton(
+                                onPressed: () {
+                                  context
+                                      .read<SignInBloc>()
+                                      .add(SignWithGoogle());
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: const Color(0xffDB4437),
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 15, horizontal: 30),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                ),
+                                child: const Text(
+                                  'Login with Google',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
+                                ),
                               ),
-                            ),
+                            ],
                           );
                         },
                       ),

@@ -26,6 +26,7 @@ class SearchDetailScreen extends StatelessWidget {
       backgroundColor: AppTheme.primaryColor,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
+        scrolledUnderElevation: 0,
         title: Row(
           children: [
             const Spacer(),

@@ -18,6 +18,8 @@ class SignInEvent {}
 
 class SignOutEvent extends SignInEvent {}
 
+class SignWithGoogle extends SignInEvent {}
+
 // class SignOutEvent extends SignInEvent {
 //   SignOutEvent() : super("", ""); // Không cần email và password cho logout
 // }

@@ -1,5 +1,7 @@
 part of 'signup_bloc.dart';
 
+class SignStateOutSuccess extends SignupState {}
+
 class SignupFailure extends SignupState {
   final String error;
 

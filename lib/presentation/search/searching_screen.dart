@@ -29,6 +29,7 @@ class _SearchingScreenState extends State<SearchingScreen>
         appBar: AppBar(
           toolbarHeight: 100,
           backgroundColor: Colors.transparent,
+          scrolledUnderElevation: 0, // đổi nổi của appBar khi cuộn
           title: const Padding(
             padding: EdgeInsets.only(top: 10, left: 10),
             child: Text(
