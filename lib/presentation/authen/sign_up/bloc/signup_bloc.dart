@@ -23,9 +23,9 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
 
         // Lưu thông tin người dùng vào Firestore
         await _firestore
-            .collection('user')
+            .collection('users')
             .doc(userCredential.user!.uid)
-            .set({'email': event.email, 'username': event.username});
+            .set({'email': event.email, 'displayName': event.displayName});
 
         // Phát ra trạng thái thành công
         emit(SignupSuccess());
@@ -38,55 +38,5 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
         emit(SignupFailure('An unexpected error occurred: $e'));
       }
     });
-    // on<SignupEventGoogle>((event, emit) async {
-    //   emit(SignupLoading());
-
-    //   try {
-    //     // Bắt đầu quá trình đăng nhập Google
-    //     final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
-
-    //     // Kiểm tra xem người dùng có hủy quá trình đăng nhập không
-    //     if (googleUser == null) {
-    //       emit(SignupFailure("Đăng nhập bị hủy"));
-    //       return; // Nếu người dùng hủy
-    //     }
-
-    //     // Lấy thông tin xác thực
-    //     final GoogleSignInAuthentication googleAuth =
-    //         await googleUser.authentication;
-
-    //     // Tạo chứng thực Firebase từ thông tin Google
-    //     final AuthCredential credential = GoogleAuthProvider.credential(
-    //       accessToken: googleAuth.accessToken,
-    //       idToken: googleAuth.idToken,
-    //     );
-
-    //     // Thực hiện đăng nhập hoặc đăng ký
-    //     final UserCredential userCredential =
-    //         await _auth.signInWithCredential(credential);
-
-    //     // Kiểm tra xem người dùng có tồn tại không
-    //     if (userCredential.additionalUserInfo?.isNewUser == true) {
-    //       // Nếu là người dùng mới, lưu thông tin vào Firestore
-    //       await _firestore
-    //           .collection('user')
-    //           .doc(userCredential.user!.uid)
-    //           .set({
-    //         'email': googleUser.email,
-    //         'username': googleUser.displayName ?? 'Người dùng mới',
-    //       });
-
-    //       emit(SignupSuccess()); // Phát ra trạng thái thành công
-    //     } else {
-    //       emit(SignupFailure(
-    //           "Tài khoản Google đã tồn tại. Vui lòng đăng nhập.")); // Tài khoản đã tồn tại
-    //     }
-    //   } on FirebaseAuthException catch (error) {
-    //     emit(SignupFailure(
-    //         error.message ?? 'Lỗi trong quá trình đăng ký với Google'));
-    //   } catch (e) {
-    //     emit(SignupFailure('Lỗi không mong muốn: $e'));
-    //   }
-    // });
   }
 }

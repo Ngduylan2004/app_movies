@@ -3,9 +3,9 @@ part of 'signup_bloc.dart';
 class SignEventOne extends SignupEvent {
   final String email;
   final String pass;
-  final String username;
+  final String displayName;
 
-  SignEventOne(this.email, this.pass, this.username);
+  SignEventOne(this.email, this.pass, this.displayName);
 }
 
 class SignEventOut extends SignupEvent {}

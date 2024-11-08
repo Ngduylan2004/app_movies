@@ -1,6 +1,7 @@
 import 'package:app_movies/presentation/home/bloc/home_bloc.dart';
 import 'package:app_movies/presentation/newFeed/newfeed_screen.dart';
 import 'package:app_movies/presentation/search/searching_screen.dart';
+import 'package:app_movies/presentation/user/acount.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -29,6 +30,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   return const NewfeedScreen();
                 } else if (state.pageIndex == 1) {
                   return const SearchingScreen();
+                } else if (state.pageIndex == 2) {
+                  return const Acount();
                 }
                 return Container();
               },
@@ -49,6 +52,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   icon: const Icon(Icons.search, color: Colors.white, size: 35),
                   onPressed: () =>
                       _onIconTapped(1), // Chuyển về màn hình tìm kiếm
+                ),
+                IconButton(
+                  icon: const Icon(Icons.person, color: Colors.white, size: 35),
+                  onPressed: () =>
+                      _onIconTapped(2), // Chuyển về màn hình tìm kiếm
                 ),
               ],
             ),
