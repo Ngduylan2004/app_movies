@@ -1,0 +1,38 @@
+{
+    "appName": "Movie App",
+    "newFeedTitle": "Stream",
+    "newFeedSubtitle": "Mọi nơi",
+    "newFeed": "Xu hướng",
+    "newFeedBannerClose": "Đóng",
+
+    "searchTitle": "Tìm Phim, TV Series và hơn thế nữa",
+    "searchTextField": "Tìm kiếm phim, chương trình TV, người....",
+    "searchHint": "Tìm kiếm phim, chương trình TV, người....",
+    "searchNoResults": "Rất tiếc, chúng tôi không tìm thấy phim",
+    "searchNoResultsHint": "Tìm phim bằng cách nhập tiêu đề, thể loại, năm, v.v.",
+    "searchButton": "Tìm kiếm",
+
+    "profileTitle": "Thông tin cá nhân",
+    "lastName": "Họ",             
+    "firstName": "Tên",       
+    "birthday": "Ngày sinh",      
+    "gender": "Giới tính",       
+    "saveButton": "Lưu",
+
+
+
+     "@detail": {
+        "description": "Các bản dịch màn hình chi tiết"
+    },
+    "detailVoteCount": "Lượt bình chọn:",
+    "detailImdb": "IMDb",
+    "detailReleaseDate": "Ngày phát hành",
+    "detailNoReleaseDate": "Chưa có ngày phát hành",
+    "detailGenres": "Thể loại",
+    "detailNoGenres": "Chưa có thể loại",
+    "detailSynopsis": "Tóm tắt",
+    "detailNoSynopsis": "Chưa có tóm tắt.",
+    "detailRelatedMovies": "Phim liên quan",
+    "detail4K": "4K",
+    "detailUntitled": "Chưa đặt tên"
+}

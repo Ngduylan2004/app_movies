@@ -6,6 +6,7 @@ import 'package:app_movies/presentation/search/widget/movie_group_widget.dart';
 import 'package:app_movies/presentation/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SearchingScreen extends StatefulWidget {
   const SearchingScreen({super.key});
@@ -30,14 +31,14 @@ class _SearchingScreenState extends State<SearchingScreen>
           toolbarHeight: 100,
           backgroundColor: Colors.transparent,
           scrolledUnderElevation: 0, // đổi nổi của appBar khi cuộn
-          title: const Padding(
-            padding: EdgeInsets.only(top: 10, left: 10),
+          title: Padding(
+            padding: const EdgeInsets.only(top: 10, left: 10),
             child: Text(
-              'Find Movies, TV series,\n and more..',
-              style: TextStyle(
+              AppLocalizations.of(context)!.searchTitle,
+              style: const TextStyle(
                 color: Colors.white,
                 fontFamily: 'Lato',
-                fontSize: 30,
+                fontSize: 23,
               ),
             ),
           ),
@@ -64,7 +65,8 @@ class _SearchingScreenState extends State<SearchingScreen>
                               icon: const Icon(Icons.clear)),
                           filled: true,
                           fillColor: const Color(0xff211F30),
-                          hintText: 'Sherlock Holmes..',
+                          hintText:
+                              AppLocalizations.of(context)!.searchTextField,
                           hintStyle: TextStyle(color: Colors.grey[400]),
                           prefixIcon: IconButton(
                             icon: const Icon(Icons.search, color: Colors.white),

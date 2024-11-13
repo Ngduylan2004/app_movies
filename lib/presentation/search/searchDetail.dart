@@ -1,7 +1,7 @@
 import 'package:app_movies/presentation/detail/detail_screen.dart';
-import 'package:app_movies/presentation/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'bloc/search_bloc.dart';
 
@@ -23,7 +23,7 @@ class SearchDetailScreen extends StatelessWidget {
     });
 
     return Scaffold(
-      backgroundColor: AppTheme.primaryColor,
+      backgroundColor: const Color(0xff15141F),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         scrolledUnderElevation: 0,
@@ -60,7 +60,7 @@ class SearchDetailScreen extends StatelessWidget {
                       decoration: InputDecoration(
                         filled: true,
                         fillColor: const Color(0xff211F30),
-                        hintText: 'Sherlock Holmes..',
+                        hintText: AppLocalizations.of(context)!.searchTextField,
                         hintStyle: TextStyle(color: Colors.grey[400]),
                         prefixIcon: IconButton(
                           icon: const Icon(Icons.search, color: Colors.white),
@@ -101,23 +101,24 @@ class SearchDetailScreen extends StatelessWidget {
                   builder: (context, state) {
                     if (state.movies.isEmpty) {
                       // Nếu không có phim nào được tìm thấy, hiển thị thông báo
-                      return const Center(
+                      return Center(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(Icons.cloud_off, color: Colors.grey, size: 80),
-                            SizedBox(height: 16),
+                            const Icon(Icons.cloud_off,
+                                color: Colors.grey, size: 80),
+                            const SizedBox(height: 16),
                             Text(
-                              'We are sorry, we can \n not find the movie :(',
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 18),
+                              AppLocalizations.of(context)!.searchNoResults,
+                              style: const TextStyle(
+                                  color: Colors.white, fontSize: 18),
                             ),
-                            SizedBox(height: 8),
+                            const SizedBox(height: 8),
                             Text(
-                              'Find your movie by typing title,\n categories, years, etc.',
+                              AppLocalizations.of(context)!.searchNoResultsHint,
                               textAlign: TextAlign.center,
-                              style:
-                                  TextStyle(color: Colors.grey, fontSize: 14),
+                              style: const TextStyle(
+                                  color: Colors.grey, fontSize: 14),
                             ),
                           ],
                         ),

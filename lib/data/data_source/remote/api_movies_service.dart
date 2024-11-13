@@ -1,6 +1,8 @@
 import 'dart:async';
 
-import 'api_service.dart'; // Ensure to import ApiService
+import 'package:app_movies/presentation/language/bloc/language_bloc.dart';
+
+import 'api_service.dart';
 
 class ApiMoviesService {
   static final ApiMoviesService _apiMoviesService =
@@ -8,21 +10,27 @@ class ApiMoviesService {
   static ApiMoviesService get instance => _apiMoviesService;
 
   final ApiService _apiService;
+  late final LanguageBloc _languageBloc;
 
   ApiMoviesService(this._apiService);
-// Lấy danh sách thể loại phim
+
+  // Getter để lấy language code hiện tại
+  String get _currentLanguage =>
+      _languageBloc.state.locale.languageCode == 'vi' ? 'vi-VN' : 'en-US';
+
+  // Lấy danh sách thể loại phim
   Future<List<dynamic>> fetchGenreMovies() async {
     const String baseUrlGenre = '/genre/movie/list';
 
     try {
       final response =
           await _apiService.dio.get(baseUrlGenre, queryParameters: {
-        'language': 'en-US',
+        'language': _currentLanguage,
       });
       return response.data['genres'] ?? [];
     } catch (e) {
       print('Lỗi khi lấy danh sách thể loại: $e');
-      return []; // Return an empty list if there's an error
+      return [];
     }
   }
 
@@ -32,7 +40,7 @@ class ApiMoviesService {
 
     try {
       final response = await _apiService.dio.get(baseUrl, queryParameters: {
-        'language': 'en-US',
+        'language': _currentLanguage,
         'with_genres': idGenre,
       });
 
@@ -49,11 +57,12 @@ class ApiMoviesService {
 
   // Lấy danh sách phim theo từ khóa tìm kiếm
   Future<List<dynamic>> fetchMoviesBySearch(String query) async {
-    const String baseUrlSearching = '/search/movie'; // Thay đổi ở đây
+    const String baseUrlSearching = '/search/movie';
 
     final response =
         await _apiService.dio.get(baseUrlSearching, queryParameters: {
       'query': query,
+      'language': _currentLanguage,
     });
 
     return response.data['results'] ?? [];
@@ -65,7 +74,9 @@ class ApiMoviesService {
 
     try {
       final response =
-          await _apiService.dio.get(baseUrlTrending, queryParameters: {});
+          await _apiService.dio.get(baseUrlTrending, queryParameters: {
+        'language': _currentLanguage,
+      });
 
       if (response.statusCode == 200) {
         return response.data['results'] ?? [];
@@ -74,15 +85,22 @@ class ApiMoviesService {
       }
     } catch (e) {
       print('Lỗi khi lấy danh sách phim xu hướng: $e');
-      return []; // Return an empty list if there's an error
+      return [];
     }
   }
 
   // lấy video movie
   Future<List<dynamic>> fetchVideoMovies(int movieId) async {
     String baseUrlVideo = '/movie/$movieId/videos';
-    final response = await _apiService.dio.get(baseUrlVideo,
-        queryParameters: {'movie_id': movieId, 'language': 'en-US'});
+    final response = await _apiService.dio.get(baseUrlVideo, queryParameters: {
+      'movie_id': movieId,
+      'language': _currentLanguage,
+    });
     return response.data['results'];
+  }
+
+  // Method để set LanguageBloc sau khi khởi tạo ch hiểu
+  void setLanguageBloc(LanguageBloc bloc) {
+    _languageBloc = bloc;
   }
 }

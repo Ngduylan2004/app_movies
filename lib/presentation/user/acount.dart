@@ -1,6 +1,7 @@
 import 'package:app_movies/presentation/user/bloc/user_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Acount extends StatefulWidget {
   const Acount({super.key});
@@ -27,9 +28,9 @@ class _AcountState extends State<Acount> {
         appBar: AppBar(
           elevation: 0,
           iconTheme: const IconThemeData(color: Colors.white),
-          title: const Text(
-            'Thông tin cá nhân',
-            style: TextStyle(
+          title: Text(
+            AppLocalizations.of(context)!.profileTitle,
+            style: const TextStyle(
               color: Colors.white,
               fontSize: 20,
               fontWeight: FontWeight.bold,
@@ -65,9 +66,9 @@ class _AcountState extends State<Acount> {
                         if (state is UserSuccess) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
-                              content: const Text(
-                                'Thông tin đã được lưu thành công!',
-                                style: TextStyle(fontSize: 16),
+                              content: Text(
+                                AppLocalizations.of(context)!.saveButton,
+                                style: const TextStyle(fontSize: 16),
                               ),
                               backgroundColor: Colors.green.shade600,
                               behavior: SnackBarBehavior.floating,
@@ -116,7 +117,8 @@ class _AcountState extends State<Acount> {
                             TextField(
                               controller: _firstNameController,
                               decoration: InputDecoration(
-                                labelText: 'Họ',
+                                labelText:
+                                    AppLocalizations.of(context)!.firstName,
                                 prefixIcon: const Icon(Icons.person_outline),
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10),
@@ -134,7 +136,8 @@ class _AcountState extends State<Acount> {
                             TextField(
                               controller: _lastNameController,
                               decoration: InputDecoration(
-                                labelText: 'Tên',
+                                labelText:
+                                    AppLocalizations.of(context)!.lastName,
                                 prefixIcon: const Icon(Icons.person_outline),
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10),
@@ -152,7 +155,8 @@ class _AcountState extends State<Acount> {
                             TextField(
                               controller: _birthdayController,
                               decoration: InputDecoration(
-                                labelText: 'Ngày sinh',
+                                labelText:
+                                    AppLocalizations.of(context)!.birthday,
                                 prefixIcon:
                                     const Icon(Icons.calendar_today_outlined),
                                 border: OutlineInputBorder(
@@ -172,7 +176,7 @@ class _AcountState extends State<Acount> {
                             DropdownButtonFormField<String>(
                               value: _gender,
                               decoration: InputDecoration(
-                                labelText: 'Giới tính',
+                                labelText: AppLocalizations.of(context)!.gender,
                                 prefixIcon: const Icon(Icons.people_outline),
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10),
@@ -246,9 +250,9 @@ class _AcountState extends State<Acount> {
                                     ),
                                   );
                                 },
-                                child: const Text(
-                                  'Lưu thông tin',
-                                  style: TextStyle(
+                                child: Text(
+                                  AppLocalizations.of(context)!.saveButton,
+                                  style: const TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
                                   ),

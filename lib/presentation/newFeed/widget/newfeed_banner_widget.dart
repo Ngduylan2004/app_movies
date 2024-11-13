@@ -1,6 +1,7 @@
 import 'package:app_movies/presentation/newFeed/bloc/new_feed_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class NewfeedBannerWidget extends StatefulWidget {
@@ -23,7 +24,7 @@ class _NewfeedBannerWidgetState extends State<NewfeedBannerWidget> {
           );
         }
 
-        final videoId = state.videoTrending[1].key ?? '';
+        final videoId = state.videoTrending[0].key ?? '';
         final thumbnailUrl =
             'https://img.youtube.com/vi/$videoId/maxresdefault.jpg'; // Lấy ảnh thumbnail từ video
 
@@ -117,12 +118,12 @@ class _NewfeedBannerWidgetState extends State<NewfeedBannerWidget> {
                       _controller.dispose();
                       Navigator.of(context).pop(); // Đóng dialog
                     },
-                    child: const Row(
+                    child: Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           Text(
-                            'Đóng',
-                            style: TextStyle(color: Colors.white),
+                            AppLocalizations.of(context)!.newFeedBannerClose,
+                            style: const TextStyle(color: Colors.white),
                           ),
                         ]),
                   ),

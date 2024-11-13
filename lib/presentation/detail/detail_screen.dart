@@ -1,11 +1,13 @@
 import 'package:app_movies/data/repostory/movies_repostory_impl.dart';
 import 'package:app_movies/domain/entities/movies_entities.dart';
 import 'package:app_movies/presentation/detail/bloc/detail_bloc.dart';
+import 'package:app_movies/presentation/detail/widget/detailSkeleton.dart';
 import 'package:app_movies/presentation/detail/widget/detail_widget.dart';
 import 'package:app_movies/presentation/newFeed/bloc/new_feed_bloc.dart'; // Import NewFeedBloc
 import 'package:app_movies/presentation/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
@@ -39,11 +41,10 @@ class _DetailPageState extends State<DetailPage> {
               BlocBuilder<NewFeedBloc, NewFeedState>(
                 builder: (context, state) {
                   if (state.videoTrending.isEmpty) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
+                    return DetailSkeleton();
                   }
                   final videoKey = state.videoTrending.first.key ?? '';
+                  print('key video {$videoKey}');
                   return GestureDetector(
                     onTap: () => _showDialog(videoKey), // Show dialog on tap
                     child: Stack(
@@ -75,15 +76,16 @@ class _DetailPageState extends State<DetailPage> {
                       children: [
                         Expanded(
                           child: Text(
-                            widget.movie.title ?? 'Untitled',
+                            widget.movie.title ??
+                                AppLocalizations.of(context)!.detailUntitled,
                             style: const TextStyle(
                                 color: AppTheme.textColor, fontSize: 24),
                           ),
                         ),
                         const SizedBox(width: 5),
-                        const Text(
-                          '4K',
-                          style: TextStyle(
+                        Text(
+                          AppLocalizations.of(context)!.detail4K,
+                          style: const TextStyle(
                               color: AppTheme.textColor, fontSize: 16),
                         ),
                         const SizedBox(width: 20)
@@ -95,9 +97,9 @@ class _DetailPageState extends State<DetailPage> {
                       children: [
                         Row(
                           children: [
-                            const Text(
-                              'VoteCount:',
-                              style: TextStyle(
+                            Text(
+                              AppLocalizations.of(context)!.detailVoteCount,
+                              style: const TextStyle(
                                   color: AppTheme.textColor, fontSize: 15),
                             ),
                             const SizedBox(width: 5),
@@ -140,9 +142,10 @@ class _DetailPageState extends State<DetailPage> {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Text(
-                                  'Release Date',
-                                  style: TextStyle(
+                                Text(
+                                  AppLocalizations.of(context)!
+                                      .detailReleaseDate,
+                                  style: const TextStyle(
                                     color: AppTheme.textColor,
                                     fontSize: 19,
                                     fontWeight: FontWeight.w500,
@@ -167,9 +170,9 @@ class _DetailPageState extends State<DetailPage> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  const Text(
-                                    'Genres',
-                                    style: TextStyle(
+                                  Text(
+                                    AppLocalizations.of(context)!.detailGenres,
+                                    style: const TextStyle(
                                       color: AppTheme.textColor,
                                       fontSize: 19,
                                       fontWeight: FontWeight.w500,
@@ -205,7 +208,8 @@ class _DetailPageState extends State<DetailPage> {
                                         child: Text(
                                           genres.isNotEmpty
                                               ? genres
-                                              : 'No genres available',
+                                              : AppLocalizations.of(context)!
+                                                  .detailNoGenres,
                                           style: const TextStyle(
                                             fontSize: 14,
                                             color: AppTheme.hintColor,
@@ -222,18 +226,19 @@ class _DetailPageState extends State<DetailPage> {
                       ],
                     ),
                     const Divider(thickness: 0.2),
-                    const Text(
-                      'Synopsis',
-                      style: TextStyle(color: Colors.white, fontSize: 19),
+                    Text(
+                      AppLocalizations.of(context)!.detailSynopsis,
+                      style: const TextStyle(color: Colors.white, fontSize: 19),
                     ),
                     Text(
-                      widget.movie.overview ?? 'No synopsis available.',
+                      widget.movie.overview ??
+                          AppLocalizations.of(context)!.detailNoSynopsis,
                       style: const TextStyle(color: AppTheme.hintColor),
                     ),
                     const SizedBox(height: 16),
-                    const Text(
-                      'Related Movies',
-                      style: TextStyle(color: Colors.white, fontSize: 19),
+                    Text(
+                      AppLocalizations.of(context)!.detailRelatedMovies,
+                      style: const TextStyle(color: Colors.white, fontSize: 19),
                     ),
                     const SizedBox(height: 16),
                     const DetailWidget(),
