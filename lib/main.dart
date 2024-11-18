@@ -1,11 +1,12 @@
-import 'package:app_movies/data/data_source/remote/api_movies_service.dart';
-import 'package:app_movies/data/repostory/movies_repostory_impl.dart';
-import 'package:app_movies/presentation/authen/splash_screen.dart';
-import 'package:app_movies/presentation/detail/bloc/detail_bloc.dart'; // Import DetailBloc
-import 'package:app_movies/presentation/home/bloc/home_bloc.dart';
-import 'package:app_movies/presentation/language/bloc/language_bloc.dart';
-import 'package:app_movies/presentation/newFeed/bloc/new_feed_bloc.dart';
-import 'package:app_movies/presentation/search/bloc/search_bloc.dart';
+import 'package:app_movies/core/language/base_api_language.dart';
+import 'package:app_movies/core/language/bloc/language_bloc.dart';
+import 'package:app_movies/features/detail/presentation/bloc/detail_bloc.dart';
+import 'package:app_movies/features/home/presentation/bloc/home_bloc.dart';
+import 'package:app_movies/features/newFeed/data/repositories/movies_repostory_impl.dart';
+import 'package:app_movies/features/newFeed/presentation/bloc/newfeed_bloc.dart';
+import 'package:app_movies/features/search/data/repositories/search_repository_impl.dart';
+import 'package:app_movies/features/search/presentation/bloc/search_bloc.dart';
+import 'package:app_movies/splash_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,22 +21,22 @@ void main() async {
 
   // Khởi tạo LanguageBloc trước
   final languageBloc = LanguageBloc();
+  BaseApiLanguage.setLanguageBloc(languageBloc);
 
   // Set LanguageBloc cho ApiMoviesService
-  ApiMoviesService.instance.setLanguageBloc(languageBloc);
 
   runApp(MultiBlocProvider(
     providers: [
       BlocProvider.value(value: languageBloc),
       BlocProvider(create: (context) => HomeBloc()),
       BlocProvider(
-        create: (context) => SearchBloc(MoviesRepositoryImpl.instance),
+        create: (context) => SearchBloc(SearchRepositoryImpl.instance),
       ),
       BlocProvider(
-        create: (context) => NewFeedBloc(MoviesRepositoryImpl.instance),
+        create: (context) => NewfeedBloc(MoviesRepositoryImpl.instance),
       ),
       BlocProvider(
-        create: (context) => DetailBloc(MoviesRepositoryImpl.instance),
+        create: (context) => DetailBloc(SearchRepositoryImpl.instance),
       ),
     ],
     child: BlocBuilder<LanguageBloc, LanguageState>(
@@ -59,7 +60,7 @@ void main() async {
           ],
           debugShowCheckedModeBanner: false,
           locale: state.locale,
-          home: const SplashScreen(),
+          home: const SplashPage(),
         );
       },
     ),

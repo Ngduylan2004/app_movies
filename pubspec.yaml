@@ -92,7 +92,7 @@ flutter:
     - assets/images/home/
     - assets/images/home/icon/
     - .env
-    - lib/l10n/
+    - lib/core/l10n/
    
     
  
