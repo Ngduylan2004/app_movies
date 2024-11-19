@@ -38,28 +38,45 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           // Thanh dưới cùng chứa các biểu tượng (icon)
-          Container(
-            color: Colors.black, // Đặt màu nền cho thanh dưới
-            padding: const EdgeInsets.symmetric(vertical: 10),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                IconButton(
-                  icon: const Icon(Icons.home, color: Colors.white, size: 35),
-                  onPressed: () => _onIconTapped(0), // Chuyển về màn hình Home
+          BlocBuilder<HomeBloc, HomeState>(
+            builder: (context, state) {
+              return Container(
+                color: Colors.black, // Đặt màu nền cho thanh dưới
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    IconButton(
+                      icon: Icon(Icons.home,
+                          color: state.pageIndex == 0
+                              ? Colors.amber
+                              : Colors.white,
+                          size: 35),
+                      onPressed: () =>
+                          _onIconTapped(0), // Chuyển về màn hình Home
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.search,
+                          color: state.pageIndex == 1
+                              ? Colors.amber
+                              : Colors.white,
+                          size: 35),
+                      onPressed: () =>
+                          _onIconTapped(1), // Chuyển về màn hình tìm kiếm
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.person,
+                          color: state.pageIndex == 2
+                              ? Colors.amber
+                              : Colors.white,
+                          size: 35),
+                      onPressed: () =>
+                          _onIconTapped(2), // Chuyển về màn hình tìm kiếm
+                    ),
+                  ],
                 ),
-                IconButton(
-                  icon: const Icon(Icons.search, color: Colors.white, size: 35),
-                  onPressed: () =>
-                      _onIconTapped(1), // Chuyển về màn hình tìm kiếm
-                ),
-                IconButton(
-                  icon: const Icon(Icons.person, color: Colors.white, size: 35),
-                  onPressed: () =>
-                      _onIconTapped(2), // Chuyển về màn hình tìm kiếm
-                ),
-              ],
-            ),
+              );
+            },
           ),
         ],
       ),

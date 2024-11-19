@@ -17,7 +17,6 @@ class _AcountPageState extends State<AcountPage> {
   final TextEditingController _birthdayController = TextEditingController();
 
   String? _gender;
-
   final List<String> _genderOptions = ['Nam', 'Nữ', 'Khác'];
 
   @override
@@ -32,7 +31,7 @@ class _AcountPageState extends State<AcountPage> {
             AppLocalizations.of(context)!.profileTitle,
             style: const TextStyle(
               color: Colors.white,
-              fontSize: 20,
+              fontSize: 22,
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -47,222 +46,246 @@ class _AcountPageState extends State<AcountPage> {
               colors: [Colors.blue.shade700, Colors.blue.shade100],
             ),
           ),
-          child: Center(
+          child: SafeArea(
             child: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Card(
-                  elevation: 8,
-                  //user
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  color: Colors.white,
-
-                  child: Padding(
-                    padding: const EdgeInsets.all(20),
-                    child: BlocConsumer<UserBloc, UserState>(
-                      listener: (context, state) {
-                        if (state is UserSuccess) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(
-                                AppLocalizations.of(context)!.saveButton,
-                                style: const TextStyle(fontSize: 16),
-                              ),
-                              backgroundColor: Colors.green.shade600,
-                              behavior: SnackBarBehavior.floating,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+              child: Card(
+                elevation: 8,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(24),
+                  child: BlocConsumer<UserBloc, UserState>(
+                    listener: (context, state) {
+                      if (state is UserSuccess) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              AppLocalizations.of(context)!.saveButton,
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
                               ),
                             ),
-                          );
-                        }
-                      },
-                      builder: (context, state) {
-                        if (state is UserGetState) {
-                          // Chỉ set giá trị một lần khi state thay đổi
-                          if (_firstNameController.text.isEmpty) {
-                            _firstNameController.text = state.firstName;
-                            _lastNameController.text = state.lastName;
-                            _emailController.text = state.email;
-                            _birthdayController.text = state.dob;
-                            _gender = state.gender;
-                          }
-                        }
-
-                        return Column(
-                          children: [
-                            ElevatedButton(
-                              onPressed: () {
-                                context
-                                    .read<UserBloc>()
-                                    .add(ImageUserEvent(imageUrl: ''));
-                              },
-                              child: const CircleAvatar(
-                                radius: 50,
-                                backgroundColor: Colors.blue,
-                                child: Icon(
-                                  Icons.person,
-                                  size: 50,
-                                  color: Colors.white,
-                                ),
-                              ),
+                            backgroundColor: Colors.green.shade600,
+                            behavior: SnackBarBehavior.floating,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
                             ),
-                            const SizedBox(height: 24),
-
-                            // Email display
-
-                            // First Name Field
-                            TextField(
-                              controller: _firstNameController,
-                              decoration: InputDecoration(
-                                labelText:
-                                    AppLocalizations.of(context)!.firstName,
-                                prefixIcon: const Icon(Icons.person_outline),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                  borderSide: BorderSide(
-                                      color: Colors.blue.shade700, width: 2),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(height: 16),
-
-                            // Last Name Field
-                            TextField(
-                              controller: _lastNameController,
-                              decoration: InputDecoration(
-                                labelText:
-                                    AppLocalizations.of(context)!.lastName,
-                                prefixIcon: const Icon(Icons.person_outline),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                  borderSide: BorderSide(
-                                      color: Colors.blue.shade700, width: 2),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(height: 16),
-
-                            // Date of Birth Field
-                            TextField(
-                              controller: _birthdayController,
-                              decoration: InputDecoration(
-                                labelText:
-                                    AppLocalizations.of(context)!.birthday,
-                                prefixIcon:
-                                    const Icon(Icons.calendar_today_outlined),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                  borderSide: BorderSide(
-                                      color: Colors.blue.shade700, width: 2),
-                                ),
-                              ),
-                              keyboardType: TextInputType.datetime,
-                            ),
-                            const SizedBox(height: 16),
-
-                            // Gender Dropdown
-                            DropdownButtonFormField<String>(
-                              value: _gender,
-                              decoration: InputDecoration(
-                                labelText: AppLocalizations.of(context)!.gender,
-                                prefixIcon: const Icon(Icons.people_outline),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                  borderSide: BorderSide(
-                                      color: Colors.blue.shade700, width: 2),
-                                ),
-                              ),
-                              items: _genderOptions.map((String value) {
-                                return DropdownMenuItem<String>(
-                                  value: value,
-                                  child: Text(value),
-                                );
-                              }).toList(),
-                              onChanged: (value) {
-                                setState(() {
-                                  _gender = value;
-                                });
-                              },
-                            ),
-                            const SizedBox(height: 24),
-
-                            SizedBox(
-                              width: double.infinity,
-                              height: 50,
-                              child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.blue.shade700,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                ),
-                                onPressed: () {
-                                  //trim để xóa khoảng trắng ở đầu và cuối
-                                  String firstName =
-                                      _firstNameController.text.trim();
-                                  String lastName =
-                                      _lastNameController.text.trim();
-                                  String dob = _birthdayController.text.trim();
-                                  String genderValue = _gender!;
-                                  String imageUrl = '';
-
-                                  if (state is UserGetState) {
-                                    context
-                                        .read<UserBloc>()
-                                        .add(UpdateUserEvent(
-                                          firstName: firstName,
-                                          lastName: lastName,
-                                          dob: dob,
-                                          gender: genderValue,
-                                          imageUrl: imageUrl,
-                                        ));
-                                  } else {
-                                    context.read<UserBloc>().add(CreatUserEvent(
-                                          firstName: firstName,
-                                          lastName: lastName,
-                                          dob: dob,
-                                          gender: genderValue,
-                                          imageUrl: imageUrl,
-                                        ));
-                                  }
-
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text(
-                                          'Thông tin đã được cập nhật thành công'),
-                                      backgroundColor: Colors.green,
-                                      duration: Duration(seconds: 2),
-                                    ),
-                                  );
-                                },
-                                child: Text(
-                                  AppLocalizations.of(context)!.saveButton,
-                                  style: const TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
+                          ),
                         );
-                      },
-                    ),
+                      }
+                    },
+                    builder: (context, state) {
+                      if (state is UserGetState) {
+                        if (_firstNameController.text.isEmpty) {
+                          _firstNameController.text = state.firstName;
+                          _lastNameController.text = state.lastName;
+                          _emailController.text = state.email;
+                          _birthdayController.text = state.dob;
+                          _gender = state.gender;
+                        }
+                      }
+
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Center(
+                            child: Stack(
+                              children: [
+                                CircleAvatar(
+                                  radius: 55,
+                                  backgroundColor: Colors.blue.shade100,
+                                  child: const CircleAvatar(
+                                    radius: 50,
+                                    backgroundColor: Colors.blue,
+                                    child: Icon(
+                                      Icons.person,
+                                      size: 40,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                                Positioned(
+                                  right: 0,
+                                  bottom: 0,
+                                  child: Container(
+                                    padding: const EdgeInsets.all(4),
+                                    decoration: BoxDecoration(
+                                      color: Colors.blue.shade700,
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: const Icon(
+                                      Icons.edit,
+                                      size: 20,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: 32),
+                          TextField(
+                            controller: _firstNameController,
+                            decoration: InputDecoration(
+                              labelText:
+                                  AppLocalizations.of(context)!.firstName,
+                              prefixIcon: const Icon(Icons.person_outline),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: BorderSide(
+                                  color: Colors.blue.shade700,
+                                  width: 2,
+                                ),
+                              ),
+                              filled: true,
+                              fillColor: Colors.grey.shade50,
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+                          TextField(
+                            controller: _lastNameController,
+                            decoration: InputDecoration(
+                              labelText: AppLocalizations.of(context)!.lastName,
+                              prefixIcon: const Icon(Icons.person_outline),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: BorderSide(
+                                  color: Colors.blue.shade700,
+                                  width: 2,
+                                ),
+                              ),
+                              filled: true,
+                              fillColor: Colors.grey.shade50,
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+                          TextField(
+                            controller: _birthdayController,
+                            decoration: InputDecoration(
+                              labelText: AppLocalizations.of(context)!.birthday,
+                              prefixIcon:
+                                  const Icon(Icons.calendar_today_outlined),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: BorderSide(
+                                  color: Colors.blue.shade700,
+                                  width: 2,
+                                ),
+                              ),
+                              filled: true,
+                              fillColor: Colors.grey.shade50,
+                            ),
+                            keyboardType: TextInputType.datetime,
+                          ),
+                          const SizedBox(height: 20),
+                          DropdownButtonFormField<String>(
+                            value: _gender,
+                            decoration: InputDecoration(
+                              labelText: AppLocalizations.of(context)!.gender,
+                              prefixIcon: const Icon(Icons.people_outline),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: BorderSide(
+                                  color: Colors.blue.shade700,
+                                  width: 2,
+                                ),
+                              ),
+                              filled: true,
+                              fillColor: Colors.grey.shade50,
+                            ),
+                            items: _genderOptions.map((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(value),
+                              );
+                            }).toList(),
+                            onChanged: (value) {
+                              setState(() {
+                                _gender = value;
+                              });
+                            },
+                          ),
+                          const SizedBox(height: 32),
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.blue.shade700,
+                              padding: const EdgeInsets.symmetric(vertical: 16),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              elevation: 2,
+                            ),
+                            onPressed: () {
+                              String firstName =
+                                  _firstNameController.text.trim();
+                              String lastName = _lastNameController.text.trim();
+                              String dob = _birthdayController.text.trim();
+                              String genderValue = _gender ?? '';
+                              String imageUrl = '';
+
+                              if (state is UserGetState) {
+                                context.read<UserBloc>().add(
+                                      UpdateUserEvent(
+                                        firstName: firstName,
+                                        lastName: lastName,
+                                        dob: dob,
+                                        gender: genderValue,
+                                        imageUrl: imageUrl,
+                                      ),
+                                    );
+                              } else {
+                                context.read<UserBloc>().add(
+                                      CreatUserEvent(
+                                        firstName: firstName,
+                                        lastName: lastName,
+                                        dob: dob,
+                                        gender: genderValue,
+                                        imageUrl: imageUrl,
+                                      ),
+                                    );
+                              }
+
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: const Text(
+                                    'Thông tin đã được cập nhật thành công',
+                                    style: TextStyle(fontSize: 16),
+                                  ),
+                                  backgroundColor: Colors.green.shade600,
+                                  behavior: SnackBarBehavior.floating,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  duration: const Duration(seconds: 2),
+                                ),
+                              );
+                            },
+                            child: Text(
+                              AppLocalizations.of(context)!.saveButton,
+                              style: const TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ],
+                      );
+                    },
                   ),
                 ),
               ),

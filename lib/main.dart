@@ -1,5 +1,4 @@
-import 'package:app_movies/core/language/base_api_language.dart';
-import 'package:app_movies/core/language/bloc/language_bloc.dart';
+import 'package:app_movies/core/language/presentation/bloc/language_bloc.dart';
 import 'package:app_movies/features/detail/presentation/bloc/detail_bloc.dart';
 import 'package:app_movies/features/home/presentation/bloc/home_bloc.dart';
 import 'package:app_movies/features/newFeed/data/repositories/movies_repostory_impl.dart';
@@ -19,15 +18,8 @@ void main() async {
   await Firebase.initializeApp();
   await dotenv.load(fileName: ".env");
 
-  // Khởi tạo LanguageBloc trước
-  final languageBloc = LanguageBloc();
-  BaseApiLanguage.setLanguageBloc(languageBloc);
-
-  // Set LanguageBloc cho ApiMoviesService
-
   runApp(MultiBlocProvider(
     providers: [
-      BlocProvider.value(value: languageBloc),
       BlocProvider(create: (context) => HomeBloc()),
       BlocProvider(
         create: (context) => SearchBloc(SearchRepositoryImpl.instance),
@@ -38,16 +30,20 @@ void main() async {
       BlocProvider(
         create: (context) => DetailBloc(SearchRepositoryImpl.instance),
       ),
+      BlocProvider(
+        lazy: false,
+        create: (context) => LanguageBloc()..add(LanguageEventStarted()),
+      ),
     ],
     child: BlocBuilder<LanguageBloc, LanguageState>(
       builder: (context, state) {
         return MaterialApp(
           theme: ThemeData(
-            colorScheme: ColorScheme.fromSwatch().copyWith(
-              primary: const Color.fromARGB(255, 254, 123, 0),
-              surface: Colors.grey,
-            ),
-          ),
+              // colorScheme: ColorScheme.fromSwatch().copyWith(
+              //   primary: const Color.fromARGB(255, 254, 123, 0),
+              //   surface: Colors.grey,
+              // ),
+              ),
           localizationsDelegates: const [
             AppLocalizations.delegate,
             GlobalMaterialLocalizations.delegate,

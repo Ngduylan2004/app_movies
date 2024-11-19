@@ -32,5 +32,42 @@ class ApiService {
       ),
     );
   }
-  Dio get dio => _dio;
+
+  // Future<Response> get(
+  //   String path,{
+
+  //   Map<String, dynamic>? queryParameters,
+  // }) async {
+  //   return await _fetchData(path,
+  //       method: HttpMethod.get, queryParameters: queryParameters);
+  // }
+
+  // Future<Response> post(
+  //   String path, {
+  //   Map<String, dynamic>? data,
+  // }) async {
+  //   return await _fetchData(path, method: HttpMethod.post, data: data);
+  // }
+  Future<Response> fetchData(
+    String path, {
+    HttpMethod method = HttpMethod.get,
+
+    // sửa method thành get
+    Map<String, dynamic>? queryParameters,
+    Map<String, dynamic>? data,
+  }) async {
+    return await _dio.request(path,
+        queryParameters: queryParameters,
+        options: Options(method: method.value));
+  }
 }
+
+enum HttpMethod {
+  get('get'),
+  post('post');
+
+  final String value;
+  const HttpMethod(this.value);
+}
+// edit api key
+//enum api key

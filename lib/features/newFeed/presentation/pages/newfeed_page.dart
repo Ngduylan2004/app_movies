@@ -1,4 +1,4 @@
-import 'package:app_movies/core/language/bloc/language_bloc.dart';
+import 'package:app_movies/core/language/presentation/bloc/language_bloc.dart';
 import 'package:app_movies/features/auth/presentation/sign_in/bloc/sign_in_bloc.dart';
 import 'package:app_movies/features/auth/presentation/sign_in/login_screen.dart';
 import 'package:app_movies/features/newFeed/data/repositories/movies_repostory_impl.dart';
@@ -10,9 +10,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class NewfeedPage extends StatelessWidget {
+class NewfeedPage extends StatefulWidget {
   const NewfeedPage({super.key});
 
+  @override
+  State<NewfeedPage> createState() => _NewfeedPageState();
+}
+
+class _NewfeedPageState extends State<NewfeedPage> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -102,16 +107,9 @@ class NewfeedPage extends StatelessWidget {
                         size: 20,
                       ),
                       onPressed: () {
-                        context.read<LanguageBloc>().add(
-                            LanguageEventChangeLanguage(
-                                locale: context
-                                            .read<LanguageBloc>()
-                                            .state
-                                            .locale
-                                            .languageCode ==
-                                        'en'
-                                    ? const Locale('vi')
-                                    : const Locale('en')));
+                        context
+                            .read<LanguageBloc>()
+                            .add(LanguageEventSwitchLanguage());
                       },
                     ),
                   ),

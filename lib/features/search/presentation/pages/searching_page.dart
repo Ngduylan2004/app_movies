@@ -156,4 +156,10 @@ class _SearchingPageState extends State<SearchingPage>
       ),
     );
   }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
 }
