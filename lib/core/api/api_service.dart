@@ -1,5 +1,7 @@
+import 'package:app_movies/core/api/api_interceptor.dart';
+import 'package:app_movies/core/enums/enum.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart'; // Để lấy API_KEY từ file .env
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class ApiService {
   static final ApiService _apiService =
@@ -10,27 +12,7 @@ class ApiService {
 
   ApiService(String baseUrl) : _dio = Dio(BaseOptions(baseUrl: baseUrl)) {
     // Thêm Interceptor vào Dio
-    _dio.interceptors.add(
-      InterceptorsWrapper(
-        onRequest: (options, handler) {
-          options.queryParameters.addAll({
-            'api_key':
-                dotenv.env['API_KEY'] ?? 'default_api_key', // Lấy từ file .env
-          });
-
-          return handler.next(options);
-        },
-        onResponse: (response, handler) {
-          return handler.next(response);
-        },
-        onError: (DioException e, handler) {
-          // Xử lý khi có lỗi xảy ra
-          print('Error occurred: ${e.response?.statusCode}');
-
-          return handler.next(e); // Tiếp tục xử lý lỗi
-        },
-      ),
-    );
+    _dio.interceptors.add(ApiInterceptor());
   }
 
   // Future<Response> get(
@@ -62,12 +44,6 @@ class ApiService {
   }
 }
 
-enum HttpMethod {
-  get('get'),
-  post('post');
 
-  final String value;
-  const HttpMethod(this.value);
-}
 // edit api key
 //enum api key

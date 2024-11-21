@@ -1,3 +1,5 @@
+import 'package:app_movies/features/auth/data/datasources/auth_data_source.dart';
+import 'package:app_movies/features/auth/data/repositories/auth_repository_impl.dart';
 import 'package:app_movies/features/auth/presentation/sign_in/login_screen.dart';
 import 'package:app_movies/features/auth/presentation/sign_up/bloc/signup_bloc.dart';
 import 'package:app_movies/features/home/presentation/pages/home_page.dart';
@@ -38,7 +40,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
             backgroundColor: Colors.transparent,
           ),
           body: BlocProvider(
-            create: (context) => SignupBloc(),
+            create: (context) =>
+                SignupBloc(AuthRepositoryImpl(AuthDataSourceImpl())),
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: SingleChildScrollView(

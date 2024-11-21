@@ -27,9 +27,10 @@ abstract class SignInState extends Equatable {
 }
 
 class SignInSuccess extends SignInState {
+  final String message;
   final String userId;
 
-  const SignInSuccess(this.userId);
+  const SignInSuccess(this.message, this.userId);
   @override
   List<Object?> get props => [userId];
 }

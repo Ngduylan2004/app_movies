@@ -1,3 +1,5 @@
+import 'package:app_movies/features/auth/data/datasources/auth_data_source.dart';
+import 'package:app_movies/features/auth/data/repositories/auth_repository_impl.dart';
 import 'package:app_movies/features/auth/presentation/sign_in/bloc/sign_in_bloc.dart';
 import 'package:app_movies/features/auth/presentation/sign_up/register_screen.dart';
 import 'package:app_movies/features/home/presentation/pages/home_page.dart';
@@ -37,7 +39,8 @@ class _LoginScreenState extends State<LoginScreen> {
             FocusScope.of(context).unfocus();
           },
           child: BlocProvider(
-            create: (context) => SignInBloc(),
+            create: (context) =>
+                SignInBloc(AuthRepositoryImpl(AuthDataSourceImpl())),
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: SingleChildScrollView(
@@ -115,19 +118,32 @@ class _LoginScreenState extends State<LoginScreen> {
                           }
                           if (state is SignInFailure) {
                             setState(() {
-                              _isLoading = false; // Dừng loading khi thất bại
+                              _isLoading = false;
                             });
+
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                 content: Text(state.error),
                                 backgroundColor: Colors.red,
+                                duration: const Duration(seconds: 3),
+                                behavior: SnackBarBehavior
+                                    .floating, // Optional: làm cho Snackbar nổi
                               ),
                             );
                           }
                           if (state is SignInSuccess) {
                             setState(() {
-                              _isLoading = false; // Dừng loading khi thành công
+                              _isLoading = false;
                             });
+
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(state.message),
+                                backgroundColor: Colors.pink,
+                                duration: const Duration(seconds: 5),
+                                behavior: SnackBarBehavior.floating,
+                              ),
+                            );
                             Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(

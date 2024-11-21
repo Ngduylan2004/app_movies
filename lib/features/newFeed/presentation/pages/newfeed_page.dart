@@ -1,4 +1,6 @@
 import 'package:app_movies/core/language/presentation/bloc/language_bloc.dart';
+import 'package:app_movies/features/auth/data/datasources/auth_data_source.dart';
+import 'package:app_movies/features/auth/data/repositories/auth_repository_impl.dart';
 import 'package:app_movies/features/auth/presentation/sign_in/bloc/sign_in_bloc.dart';
 import 'package:app_movies/features/auth/presentation/sign_in/login_screen.dart';
 import 'package:app_movies/features/newFeed/data/repositories/movies_repostory_impl.dart';
@@ -63,7 +65,8 @@ class _NewfeedPageState extends State<NewfeedPage> {
               Row(
                 children: [
                   BlocProvider(
-                    create: (context) => SignInBloc(),
+                    create: (context) =>
+                        SignInBloc(AuthRepositoryImpl(AuthDataSourceImpl())),
                     child: BlocConsumer<SignInBloc, SignInState>(
                       listener: (context, state) {
                         if (state is SignoutSuccess) {
