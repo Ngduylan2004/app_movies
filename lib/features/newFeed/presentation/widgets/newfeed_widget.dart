@@ -1,5 +1,6 @@
 import 'package:app_movies/features/detail/presentation/pages/detail_page.dart';
 import 'package:app_movies/features/newFeed/presentation/bloc/newfeed_bloc.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,7 +21,7 @@ class NewfeedWidget extends StatelessWidget {
           child: CarouselSlider(
             options: CarouselOptions(
               height: 400.0,
-              autoPlay: true,
+              autoPlay: false,
               enlargeCenterPage: true,
               aspectRatio: 16 / 9,
               autoPlayCurve: Curves.fastOutSlowIn,
@@ -58,8 +59,9 @@ class NewfeedWidget extends StatelessWidget {
                                 ),
                               ],
                             ),
-                            child: Image.network(
-                              'https://image.tmdb.org/t/p/w500${movie.posterPath}',
+                            child: CachedNetworkImage(
+                              imageUrl:
+                                  'https://image.tmdb.org/t/p/w500${movie.posterPath}',
                               width: MediaQuery.of(context).size.width * 0.75,
                               height: 400,
                               fit: BoxFit.cover,

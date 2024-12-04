@@ -8,20 +8,34 @@ part 'newfeed_state.dart';
 
 class NewfeedBloc extends Bloc<NewfeedEvent, NewfeedState> {
   final MoviesRepository movieRepository;
-  NewfeedBloc(this.movieRepository) : super(NewfeedState([], [])) {
-    on<NewfeedEventTreding>(
-      (event, emit) async {
-        final TrendingMoives = await movieRepository.getTrendingMovies();
-        emit(
-          NewfeedState(TrendingMoives, state.videoTrending),
+
+  NewfeedBloc(this.movieRepository) : super(NewfeedInitial()) {
+    on<NewfeedEventTreding>((event, emit) async {
+      {
+        final trendingMovies = await movieRepository.getTrendingMovies();
+        trendingMovies.fold(
+          (l) => emit(NewfeedErrorState(
+            errorMessage: l.message,
+            trendingMovies: [],
+            videoTrending: state.videoTrending,
+          )),
+          (r) => emit(NewfeedLoaded(r, state.videoTrending)),
         );
-      },
-    );
-    on<NewfeedEventVideo>(
-      (event, emit) async {
+      }
+    });
+
+    on<NewfeedEventVideo>((event, emit) async {
+      {
         final videoList = await movieRepository.getVideoMovies(event.movieId);
-        emit(NewfeedState(state.trendingMovies, videoList));
-      },
-    );
+        videoList.fold(
+          (l) => emit(NewfeedErrorState(
+            errorMessage: l.message,
+            trendingMovies: state.trendingMovies,
+            videoTrending: [],
+          )),
+          (r) => emit(NewfeedLoaded(state.trendingMovies, r)),
+        );
+      }
+    });
   }
 }

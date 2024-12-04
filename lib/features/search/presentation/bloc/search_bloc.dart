@@ -10,44 +10,61 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   final SearchRepository searchRepository;
 
   SearchBloc(this.searchRepository)
-      : super(SearchState('', [], [], GenreMoviesEntities(id: 0, name: ''))) {
+      : super(
+            SearchState('', '', [], [], GenreMoviesEntities(id: 0, name: ''))) {
     on<SearchEventLoadMovies>(
       (event, emit) async {
         final categories = await searchRepository.getGenres();
-        final genre = categories[0];
-        emit(SearchState(state.query, categories, [], genre));
-        add(SearchEventLoadMoviesByGenre());
+        categories.fold(
+          (l) => emit(SearchState(l.message, state.query, [], [],
+              GenreMoviesEntities(id: 0, name: ''))),
+          (r) {
+            final genre = r[0];
+            emit(SearchState('', state.query, r, [], genre));
+            add(SearchEventLoadMoviesByGenre());
+          },
+        );
       },
     );
     on<SearchEventLoadMoviesByGenre>((event, emit) async {
       final listMovies =
           await searchRepository.getMoviesByGenre(state.tabCategories.id);
-      emit(SearchState(
-          state.query, state.categories, listMovies, state.tabCategories));
+      listMovies.fold(
+        (l) => emit(SearchState(
+            l.message, state.query, state.categories, [], state.tabCategories)),
+        (r) => emit(SearchState(
+            '', state.query, state.categories, r, state.tabCategories)),
+      );
     });
 
-    on<SearchEventGenreMovies>(
-      (event, emit) async {
-        final genreMovies = await searchRepository.getGenres();
-        emit(SearchState(
-            state.query, genreMovies, state.movies, genreMovies[0]));
-      },
-    );
+    on<SearchEventGenreMovies>((event, emit) async {
+      final genreMovies = await searchRepository.getGenres();
+      genreMovies.fold(
+        (l) => emit(SearchState(
+            l.message, state.query, [], state.movies, state.tabCategories)),
+        (r) => emit(SearchState('', state.query, r, state.movies, r[0])),
+      );
+    });
 
     on<SearchEventGenreMoviesTab>((event, emit) async {
       final genreMovies =
           await searchRepository.getMoviesByGenre(event.selectedGenre.id);
-
-      emit(SearchState(
-          state.query, state.categories, genreMovies, event.selectedGenre));
+      genreMovies.fold(
+        (l) => emit(SearchState(
+            l.message, state.query, state.categories, [], event.selectedGenre)),
+        (r) => emit(SearchState(
+            '', state.query, state.categories, r, event.selectedGenre)),
+      );
     });
-    on<SearchKeyWord>(
-      (event, emit) async {
-        final searchMovies = await searchRepository.getMovieSearch(event.query);
 
-        emit(SearchState(
-            event.query, state.categories, searchMovies, state.tabCategories));
-      },
-    );
+    on<SearchKeyWord>((event, emit) async {
+      final searchMovies = await searchRepository.getMovieSearch(event.query);
+      searchMovies.fold(
+        (l) => emit(SearchState(
+            l.message, event.query, state.categories, [], state.tabCategories)),
+        (r) => emit(SearchState(
+            '', event.query, state.categories, r, state.tabCategories)),
+      );
+    });
   }
 }

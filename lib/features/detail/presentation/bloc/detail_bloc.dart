@@ -16,7 +16,13 @@ class DetailBloc extends Bloc<DetailEvent, DetailState> {
             await searchRepository.getMoviesByGenre(event.genreId[0]);
         final relateGenre = await searchRepository.getGenres();
 
-        emit(DetailState(relateMovies, relateGenre, state.videoDetail));
+        relateMovies.fold(
+          (l) => emit(DetailState([], [], state.videoDetail)),
+          (r) => relateGenre.fold(
+            (l) => emit(DetailState(r, [], state.videoDetail)),
+            (genres) => emit(DetailState(r, genres, state.videoDetail)),
+          ),
+        );
       },
     );
     // on<DetailEventGetVideo>(

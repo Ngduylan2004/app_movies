@@ -1,5 +1,3 @@
-// data/models/movies_model.dart
-
 import 'package:app_movies/core/entities/movies_entities.dart';
 
 class MoviesModel extends MoviesEntities {

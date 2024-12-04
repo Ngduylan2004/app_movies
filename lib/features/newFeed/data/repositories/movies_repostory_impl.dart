@@ -1,9 +1,9 @@
 import 'package:app_movies/core/entities/movies_entities.dart';
 import 'package:app_movies/core/entities/video_movies_entities.dart';
-import 'package:app_movies/core/model/movies_model.dart';
-import 'package:app_movies/core/model/video_movies.dart';
+import 'package:app_movies/core/error/error.dart';
 import 'package:app_movies/features/newFeed/data/datasources/remote/api_movie_service.dart';
 import 'package:app_movies/features/newFeed/domain/repositories/movies_repostory.dart';
+import 'package:dartz/dartz.dart';
 
 class MoviesRepositoryImpl implements MoviesRepository {
   static final MoviesRepositoryImpl _moviesRepositoryImpl =
@@ -15,18 +15,23 @@ class MoviesRepositoryImpl implements MoviesRepository {
   MoviesRepositoryImpl(this._movieService);
 
   @override
-  Future<List<MoviesEntities>> getTrendingMovies() async {
-    final trendingData = await _movieService.fetchTrendingMovies();
-    return trendingData
-        .map<MoviesModel>((movie) => MoviesModel.fromJson(movie))
-        .toList();
+  Future<Either<Failure, List<MoviesEntities>>> getTrendingMovies() async {
+    try {
+      final trendingData = await _movieService.fetchTrendingMovies();
+      return Right(trendingData);
+    } catch (e) {
+      return Left(e as ServerFailure); // Đơn giản chỉ đóng gói lỗi vào Left
+    }
   }
 
   @override
-  Future<List<VideoMoviesEntities>> getVideoMovies(int movieId) async {
-    final videos = await _movieService.fetchVideoMovies(movieId);
-    return videos
-        .map<VideoMovies>((video) => VideoMovies.fromJson(video))
-        .toList();
+  Future<Either<Failure, List<VideoMoviesEntities>>> getVideoMovies(
+      int movieId) async {
+    try {
+      final videos = await _movieService.fetchVideoMovies(movieId);
+      return Right(videos);
+    } catch (e) {
+      return Left(e as ServerFailure); // Đơn giản chỉ đóng gói lỗi vào Left
+    }
   }
 }

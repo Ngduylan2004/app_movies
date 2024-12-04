@@ -30,8 +30,8 @@ class MoviesEntities {
     this.voteCount,
   });
 
-  @override
-  String toString() {
-    return 'movie id: $id';
-  }
+  // @override
+  // String toString() {
+  //   return 'movie id: $id';
+  // }
 }

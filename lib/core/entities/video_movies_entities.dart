@@ -1,3 +1,5 @@
+import 'package:app_movies/core/model/video_movies.dart';
+
 class VideoMoviesEntities {
   String? iso6391;
   String? iso31661;
@@ -26,4 +28,6 @@ class VideoMoviesEntities {
   String toString() {
     return ('key movie: $key');
   }
+
+  static fromJson(VideoMovies video) {}
 }

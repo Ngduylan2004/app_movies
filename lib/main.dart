@@ -1,4 +1,5 @@
 import 'package:app_movies/core/language/presentation/bloc/language_bloc.dart';
+import 'package:app_movies/core/utils/bloc/base_screen_internet_bloc.dart';
 import 'package:app_movies/features/detail/presentation/bloc/detail_bloc.dart';
 import 'package:app_movies/features/home/presentation/bloc/home_bloc.dart';
 import 'package:app_movies/features/newFeed/data/repositories/movies_repostory_impl.dart';
@@ -12,6 +13,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,6 +35,10 @@ void main() async {
       BlocProvider(
         lazy: false,
         create: (context) => LanguageBloc()..add(LanguageEventStarted()),
+      ),
+      BlocProvider<BaseScreenInternetBloc>(
+        create: (context) =>
+            BaseScreenInternetBloc(InternetConnectionChecker()),
       ),
     ],
     child: BlocBuilder<LanguageBloc, LanguageState>(
